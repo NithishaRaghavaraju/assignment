@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .heading{
+         text-align: center;
+      }
+      #container{
+        border: #000 2px solid;
+        margin: 2%;
+        padding: 1%;
+      }
+      .reset {
+        position: relative;
+}
+
+#btn {
+  position: absolute;
+  right: 0;
+  margin-right: 10%;
+  width: 50px;
+  height: 30px;
+}
+    </style>
+  </head>
+  <body>
+    <diV>
+      <h1 class="heading">Bubbles App</h1>
+    <div id="container">
+      
+    </div>
+    <div class="reset">
+        <button type="button" id="btn">Reset</button>
+    </div>
+    
+</diV>
+
+    <script>
+         const ids = ["Circle1","Circle2","Circle3","Circle4"];
+         const color = ['yellow','blue','red',"green"]
+let j = 0;
+let arrowM = 0;
+function canvas_arrow(context, fromx, fromy, tox, toy) {
+        var headlen = 10; 
+        var dx = tox - fromx;
+        var dy = toy - fromy;
+        var angle = Math.atan2(dy, dx);
+        context.moveTo(fromx, fromy);
+        context.lineTo(tox, toy);
+        context.lineTo(
+          tox - headlen * Math.cos(angle - Math.PI / 6),
+          toy - headlen * Math.sin(angle - Math.PI / 6)
+        );
+        context.moveTo(tox, toy);
+        context.lineTo(
+          tox - headlen * Math.cos(angle + Math.PI / 6),
+          toy - headlen * Math.sin(angle + Math.PI / 6)
+        );
+      }
+
+let posX = 0;
+let posY = 0;
+for (let i = 0; i < ids.length; i++) {
+      const canvasContainer = document.getElementById("container");
+      canvasContainer.style.display = 'flex';
+      canvasContainer.style.flexWrap = 'wrap';
+      console.log(ids[i])
+      const canvasCircle = document.createElement("canvas");
+      canvasCircle.id = ids[i];
+      canvasCircle.style.height = '100px';
+      canvasCircle.style.display = 'block';
+      canvasCircle.style.width = "10%";
+      canvasCircle.style.marginBottom = "1%";
+      canvasContainer.appendChild(canvasCircle)
+      const canvasid = document.getElementById(ids[i]);
+      const context = canvasCircle.getContext("2d");
+      const centerX = canvasCircle.width / 2;
+      const centerY = canvasCircle.height / 2;
+
+      console.log(centerX)
+      const radius = canvasCircle.height / 2;
+
+      context.beginPath();
+      context.arc(centerX+70, centerY, radius, 0, 2 * Math.PI,false);
+      context.fillStyle = color[i];
+      context.fill();
+      context.strokeStyle = "#003300";
+
+      context.stroke();
+
+      let canvasArrow = document.createElement("canvas");
+      canvasArrow.id = "arrow" + i;
+      canvasArrow.style.height = '60px';
+      canvasArrow.style.display = 'block';
+      canvasArrow.style.paddingTop = "30px";
+
+      canvasArrow.style.width = '85%';
+      canvasContainer.appendChild(canvasArrow)
+      let contextArrow = canvasArrow.getContext("2d");
+      let arrowX = canvasArrow.width; 
+      
+let isMoving = false;
+function drawArrow() {
+
+  contextArrow.clearRect(0, 0, canvasArrow.width, canvasArrow.height);
+
+  contextArrow.save();
+  
+
+  contextArrow.translate(arrowX, 50);
+  
+ 
+  contextArrow.beginPath();
+  contextArrow.moveTo(0, 0);
+  contextArrow.lineTo(-40, 0);
+  contextArrow.lineTo(-40, 25);
+  contextArrow.lineTo(-45, 0);
+  contextArrow.lineTo(-40, -25);
+  contextArrow.lineTo(-40, 0);
+  contextArrow.closePath();
+  contextArrow.stroke();
+  
+  contextArrow.restore();
+
+  console.log(arrowX)
+  if (isMoving === true) {
+    arrowX -= 1;
+    
+    if (arrowX < 46.5) {
+      
+      isMoving = false;
+      context.fillStyle = 'grey'; 
+      context.fill();
+    }
+  }
+  requestAnimationFrame(drawArrow);
+}
+
+      drawArrow()
+  
+      canvasCircle.addEventListener("click", function() {
+        isMoving = true;
+        drawArrow()
+});
+}
+
+const resetBtn = document.getElementById('btn');
+
+resetBtn.addEventListener('click', () => {
+  location.reload();
+});
+
+     
+    </script>
+  </body>
+</html>
